@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Saludo climático desde Medellín con fecha, hora y un haiku.">
+    <title>Medellín | Saludo Climático y Haiku</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,500;1,600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: radial-gradient(circle at 20% 20%, #1e2640 0%, #0d111a 100%);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+            --accent-glow: #38bdf8;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-accent: #7dd3fc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient background glow */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.15), transparent 70%);
+            top: 10%;
+            left: 15%;
+            pointer-events: none;
+            filter: blur(40px);
+        }
+
+        body::after {
+            content: "";
+            position: absolute;
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.12), transparent 70%);
+            bottom: 10%;
+            right: 15%;
+            pointer-events: none;
+            filter: blur(50px);
+        }
+
+        .card {
+            position: relative;
+            z-index: 1;
+            max-width: 640px;
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.75rem 2.25rem;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(125, 211, 252, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            color: var(--text-accent);
+            padding: 0.4rem 0.9rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            margin-bottom: 1.25rem;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #38bdf8;
+            box-shadow: 0 0 10px #38bdf8;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(0.85);
+            }
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .location-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .greeting-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #e2e8f0;
+            margin-bottom: 2rem;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.25rem;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .meta-value {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .haiku-box {
+            position: relative;
+            background: linear-gradient(145deg, rgba(56, 189, 248, 0.06), rgba(168, 85, 247, 0.06));
+            border: 1px dashed rgba(125, 211, 252, 0.35);
+            border-radius: 16px;
+            padding: 1.75rem 1.5rem;
+            text-align: center;
+        }
+
+        .haiku-tag {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f172a;
+            border: 1px solid rgba(125, 211, 252, 0.4);
+            border-radius: 9999px;
+            padding: 0.15rem 0.75rem;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-accent);
+            font-weight: 600;
+        }
+
+        .haiku-verse {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.25rem;
+            line-height: 1.9;
+            color: #f8fafc;
+            letter-spacing: 0.01em;
+        }
+
+        .haiku-author {
+            margin-top: 0.75rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: 'Outfit', sans-serif;
+            font-style: normal;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 2rem 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.65rem;
+            }
+
+            .haiku-verse {
+                font-size: 1.15rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="card" id="greeting-card">
+        <div class="header-badge" id="weather-badge">
+            <span class="pulse-dot" aria-hidden="true"></span>
+            <span>19 °C · Brisa fresca nocturna</span>
+        </div>
+
+        <h1>¡Buenas noches desde Medellín!</h1>
+        <p class="location-subtitle">Valle de Aburrá · Ciudad de la Eterna Primavera</p>
+
+        <p class="greeting-text" id="greeting-paragraph">
+            En esta apacible noche de octubre, Medellín nos recibe con un clima fresco y sereno tras un día templado de
+            montaña. El aire puro que desciende suavemente por las laderas del valle envuelve la ciudad en una atmósfera
+            ideal para descansar y contemplar el titilar de las luces en los cerros.
+        </p>
+
+        <section class="meta-grid" aria-label="Información de fecha y hora">
+            <div class="meta-item">
+                <span class="meta-label">Fecha</span>
+                <span class="meta-value" id="current-date">8 de octubre de 2026</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Hora local</span>
+                <span class="meta-value" id="current-time">07:40 PM</span>
+            </div>
+        </section>
+
+        <div class="haiku-box" id="haiku-container">
+            <span class="haiku-tag">Haiku</span>
+            <blockquote class="haiku-verse">
+                Cae la noche,<br>
+                brisa fresca en las montañas,<br>
+                paz en el valle.
+            </blockquote>
+            <p class="haiku-author">Eterna primavera nocturna</p>
+        </div>
+    </main>
+
+    <script>
+        // Actualización dinámica opcional del reloj manteniendo la zona horaria local
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('es-CO', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            });
+            const dateStr = now.toLocaleDateString('es-CO', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            const timeEl = document.getElementById('current-time');
+            const dateEl = document.getElementById('current-date');
+
+            if (timeEl) timeEl.textContent = timeStr;
+            if (dateEl) dateEl.textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+        }
+
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+
+</html>
